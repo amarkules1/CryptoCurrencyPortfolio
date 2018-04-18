@@ -9,8 +9,8 @@
 	<table class="table table-bordered">
       <thead class="thead-light">
         <tr>
-          <th scope="col">Stock</th>
-          <th scope="col">Shares</th>
+          <th scope="col">Coin</th>
+          <th scope="col">Amount</th>
           <th scope="col">Buy Price</th>
           <th scope="col">Total Cost</th>
           <th scope="col">Current Price</th>
@@ -41,8 +41,8 @@
         <tr>
           <td colspan="4">
             <form class="form-inline" #form="ngForm" (ngSubmit)="editCat(cat)">
-              <input class="form-control mr-2" type="text" name="name" [(ngModel)]="cat.name" placeholder="Stock" required>
-              <input class="form-control mr-2" type="number" step="1" name="shares" [(ngModel)]="cat.shares" placeholder="Shares" required>
+              <input class="form-control mr-2" type="text" name="name" [(ngModel)]="cat.name" placeholder="Coin" required>
+              <input class="form-control mr-2" type="number" step="1" name="shares" [(ngModel)]="cat.shares" placeholder="Amount" required>
               <input class="form-control mr-2" type="number" step="any" name="site" [(ngModel)]="cat.boughtAt" placeholder="Buy Price" required>
               <button class="btn btn-sm btn-primary mr-2" type="submit" [disabled]="!form.form.valid"><i class="fa fa-floppy-o"></i> Save</button>
               <button class="btn btn-sm btn-warning" (click)="cancelEditing()"><i class="fa fa-times"></i> Cancel</button>
@@ -57,19 +57,11 @@
   <h4 class="card-header">Add new Stock Position</h4>
   <div class="card-body">
     <form class="form-inline" [formGroup]="addCatForm" (ngSubmit)="addCat()">
-      <input class="form-control mr-2" type="text" name="name" formControlName="name" placeholder="Stock">
-      <input class="form-control mr-2" type="number" step="1" name="shares" formControlName="shares" placeholder="Shares">
+      <input class="form-control mr-2" type="text" name="name" formControlName="name" placeholder="Coin">
+      <input class="form-control mr-2" type="number" step="1" name="shares" formControlName="shares" placeholder="Amount">
       <input class="form-control mr-2" type="number" step="any" name="boughtAt" formControlName="boughtAt" placeholder="Buy Price">
       <button class="btn btn-primary" type="submit" [disabled]="!addCatForm.valid"><i class="fa fa-floppy-o"></i> Add</button>
     </form>
   </div>
 </div>
 
-<div class="card">
-  <h4 class="card-header">Graph</h4>
-  <div class="card-body">
-    <canvas id="ctx"></canvas>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js">
-    </script><script>console.log('a');</script>
-  </div>
-</div>

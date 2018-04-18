@@ -19,6 +19,12 @@ export class CatService {
     return data;
   }
 
+  getMovingAve(name, i): Observable<number> {
+    var data = this.http.get<number>('/api/cats/moving/' + name + '/' + i);
+    console.log(data);
+    return data;
+  }
+
   countCats(): Observable<number> {
     return this.http.get<number>('/api/cats/count');
   }

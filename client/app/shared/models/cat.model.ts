@@ -5,4 +5,6 @@ export class Cat {
   boughtAt?: number;
   user?: string;
   value?: number;
+  mAve?: number;
+  index: number;
 }

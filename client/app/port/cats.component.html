@@ -1,0 +1,51 @@
+<app-loading [condition]="isLoading"></app-loading>
+
+<app-toast [message]="toast.message"></app-toast>
+
+<div class="card mb-3" *ngIf="!isLoading">
+  <h4 class="card-header">Current Items ({{cats.length}})</h4>
+  <div class="card-body">
+    
+	<table class="table table-bordered">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Coin</th>
+          <th scope="col">Amount</th>
+          <th scope="col">Buy Price</th>
+          <th scope="col">Total Cost</th>
+          <th scope="col">Current Price</th>
+          <th scope="col">Total Value</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="cats.length === 0">
+        <tr>
+          <td colspan="6">Your portfolio is empty. Add a new item below.</td>
+        </tr>  
+      </tbody>
+      <tbody>
+        <tr *ngFor="let cat of cats">
+          <td>{{cat.name}}</td>
+          <td>{{cat.shares}}</td>
+          <td>{{cat.boughtAt}}</td>
+          <td>{{cat.shares * cat.boughtAt}}</td>
+          <td>{{cat.value}}</td>
+          <td>{{cat.value * cat.shares}}</td>
+        </tr>  
+      </tbody>
+      
+    </table>
+  </div>
+</div>
+<div class="card" *ngFor="let cat of cats">
+  <h4 class="card-header">{{cat.name}}: ${{cat.value}}</h4>
+  <div class="card-body">
+    <ul>
+      <li>Total Value: {{cat.value * cat.shares}} ({{cat.shares}} coin(s))</li>
+      <li>Change Since Purchase: {{((cat.value/cat.boughtAt) - 1)*100}}%</li>
+      <li>Profit: ${{(cat.value - cat.boughtAt)*cat.shares}}</li>
+      <li>30 Day Moving Average: ${{cat.mAve}}</li>
+    </ul>
+    <svg width="400" height="300" id="graph{{cat.index}}"></svg>
+  </div>
+</div>
+

@@ -21,6 +21,7 @@ export default function setRoutes(app) {
   router.route('/cat/:id').put(catCtrl.update);
   router.route('/cat/:id').delete(catCtrl.delete);
   router.route('/cats/price/:id/:index').get(catCtrl.getPrice);
+  router.route('/cats/moving/:id/:index').get(catCtrl.getMovingAve);
 
   // Users
   router.route('/login').post(userCtrl.login);

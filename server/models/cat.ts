@@ -5,7 +5,9 @@ const catSchema = new mongoose.Schema({
   shares: Number,
   boughtAt: Number,
   user: String,
-  value: { type: Number, default: 0 }
+  value: { type: Number, default: 0 },
+  mAve: { type: Number, default: 0 },
+  index: { type: Number, default: 0 }
 });
 
 const Cat = mongoose.model('Cat', catSchema);

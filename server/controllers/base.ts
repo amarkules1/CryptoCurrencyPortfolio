@@ -66,7 +66,7 @@ abstract class BaseCtrl {
 
   getPrice = (req, res) => {
     const https = require('https');
-    https.get('https://api.iextrading.com/1.0/stock/' + req.params.id + '/quote', resp => {
+    https.get('https://min-api.cryptocompare.com/data/price?fsym=' + req.params.id + '&tsyms=USD', resp => {
       let data = '';
       resp.on('data', (chunk) => { data += chunk; });
       resp.on('end', () => {
@@ -74,6 +74,32 @@ abstract class BaseCtrl {
         data['index'] = req.params.index;
         console.log(data);
         res.status(200).json(data);
+      });
+
+    }).on("error", (err) => {
+      console.log("Error: " + err.message);
+    });
+  }
+
+    getMovingAve = (req, res) => {
+    const https = require('https');
+    https.get('https://min-api.cryptocompare.com/data/histoday?fsym=' + req.params.id + '&tsym=USD&limit=30&aggregate=1&e=CCCAGG', resp => {
+      let data = '';
+      resp.on('data', (chunk) => { data += chunk; });
+      resp.on('end', () => {
+        data = JSON.parse(data);
+        let mAve = 0;
+        let i = 0;
+        for (i = 0; i < 30;i++){
+          mAve += data['Data'][i]['close'];
+        }
+        mAve = (mAve / 30);
+        let response = {
+          movingAve: mAve,
+          index: req.params.index
+        };
+        //console.log(data);
+        res.status(200).json(response);
       });
 
     }).on("error", (err) => {

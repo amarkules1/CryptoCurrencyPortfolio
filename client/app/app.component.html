@@ -8,12 +8,17 @@
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
           <a routerLink="/" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-            <i class="fa fa-home"></i> Home
+            <i class="fa fa-home"></i> About
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/cats" class="nav-link" routerLinkActive="active">
-            <i class="fa fa-list"></i> Vault
+          <a routerLink="/transactions" class="nav-link" routerLinkActive="active" *ngIf="auth.loggedIn">
+            <i class="fa fa-list"></i> Transactions
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/portfolio" class="nav-link" routerLinkActive="active" *ngIf="auth.loggedIn">
+            <i class="fa fa-list"></i> Portfolio
           </a>
         </li>
         <li class="nav-item">

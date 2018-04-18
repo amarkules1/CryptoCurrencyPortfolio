@@ -4,15 +4,15 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { CatService } from '../services/cat.service';
 import { ToastComponent } from '../shared/toast/toast.component';
 import { Cat } from '../shared/models/cat.model';
-
+declare var d3: any;
 
 @Component({
   selector: 'app-cats',
   templateUrl: './cats.component.html',
   styleUrls: ['./cats.component.css']
 })
-
-export class CatsComponent implements OnInit {
+   
+export class PortfolioComponent implements OnInit {
   
   cat = new Cat();
   cats: Cat[] = [];
@@ -76,6 +76,17 @@ export class CatsComponent implements OnInit {
       this.catService.getPrice(Cats[i].name, i).subscribe(
         data => {
           this.cats[data['index']].value = data['USD'];
+          this.cats[data['index']].index = data['index'];
+        },
+        error => console.log(error),
+        () => this.isLoading = false
+      );
+    }
+    for (var i = 0; i < Cats.length; i++) {
+      this.catService.getMovingAve(Cats[i].name, i).subscribe(
+        data => {
+          this.cats[data['index']].mAve = data['movingAve'];
+          this.genGraph(this.cats[data['index']]);
         },
         error => console.log(error),
         () => this.isLoading = false
@@ -86,6 +97,22 @@ export class CatsComponent implements OnInit {
   enableEditing(cat: Cat) {
     this.isEditing = true;
     this.cat = cat;
+  }
+
+  genGraph(cat: Cat) {
+    let dataArray = [1, (cat.value / cat.boughtAt), (cat.mAve / cat.boughtAt)];
+    console.log(dataArray);
+    let graphID = "#graph" + cat.index;
+    let svg = d3.select(graphID);
+    console.log(svg);
+    svg.selectAll("rect")
+      .data(dataArray)
+      .enter().append("rect")
+        .attr("style", "fill:#007bff")
+        .attr("height", function (d, i) { return d * 200 })
+        .attr("width", "80")
+        .attr("x", function (d, i) { return (i * 120) + 25 })
+        .attr("y", function (d, i) { return 300 - (d * 200) });
   }
 
   cancelEditing() {
