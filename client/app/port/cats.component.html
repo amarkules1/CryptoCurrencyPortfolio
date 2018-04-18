@@ -40,12 +40,12 @@
   <h4 class="card-header">{{cat.name}}: ${{cat.value}}</h4>
   <div class="card-body">
     <ul>
-      <li>Total Value: {{cat.value * cat.shares}} ({{cat.shares}} coin(s))</li>
-      <li>Change Since Purchase: {{((cat.value/cat.boughtAt) - 1)*100}}%</li>
-      <li>Profit: ${{(cat.value - cat.boughtAt)*cat.shares}}</li>
-      <li>30 Day Moving Average: ${{cat.mAve}}</li>
+      <li>Total Value: ${{round(cat.value * cat.shares)}} ({{cat.shares}} coin(s))</li>
+      <li>Change Since Purchase: {{round(((cat.value/cat.boughtAt) - 1)*100)}}%</li>
+      <li>Profit: ${{round((cat.value - cat.boughtAt)*cat.shares)}}</li>
+      <li>30 Day Moving Average: ${{round(cat.mAve)}}</li>
     </ul>
     <svg width="400" height="300" id="graph{{cat.index}}"></svg>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bought At&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Current Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;30 Day Ave</p>
   </div>
 </div>
-

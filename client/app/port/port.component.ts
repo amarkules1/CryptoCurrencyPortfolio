@@ -72,26 +72,40 @@ export class PortfolioComponent implements OnInit {
   }
 
   getPrices(Cats: Cat[]): any {
-    for (var i = 0; i < Cats.length; i++) {
+    let len = Cats.length;
+    this.cats.push(new Cat());
+    this.cats[len].name = "TOTAL";
+    this.cats[len].index = len;
+    this.cats[len].boughtAt = 0;
+    this.cats[len].value = 0;
+    this.cats[len].mAve = 0;
+    this.cats[len].shares = 1;
+    for (var i = 0; i < len; i++) {
       this.catService.getPrice(Cats[i].name, i).subscribe(
         data => {
           this.cats[data['index']].value = data['USD'];
           this.cats[data['index']].index = data['index'];
+          this.cats[len].value += data['USD'] * this.cats[data['index']].shares;
+          this.cats[len].boughtAt += this.cats[data['index']].boughtAt * this.cats[data['index']].shares;
+          
         },
         error => console.log(error),
         () => this.isLoading = false
       );
     }
-    for (var i = 0; i < Cats.length; i++) {
+    for (var i = 0; i < Cats.length - 1; i++) {
       this.catService.getMovingAve(Cats[i].name, i).subscribe(
         data => {
           this.cats[data['index']].mAve = data['movingAve'];
           this.genGraph(this.cats[data['index']]);
+          this.cats[len].mAve += data['movingAve'] * this.cats[data['index']].shares;
+          if (i === Cats.length - 1) { this.genGraph(this.cats[len]);}
         },
         error => console.log(error),
         () => this.isLoading = false
       );
     }
+    
   }
 
   enableEditing(cat: Cat) {
@@ -100,7 +114,7 @@ export class PortfolioComponent implements OnInit {
   }
 
   genGraph(cat: Cat) {
-    let dataArray = [1, (cat.value / cat.boughtAt), (cat.mAve / cat.boughtAt)];
+    let dataArray = [this.round(cat.boughtAt), this.round(cat.value), this.round(cat.mAve)];
     console.log(dataArray);
     let graphID = "#graph" + cat.index;
     let svg = d3.select(graphID);
@@ -109,10 +123,20 @@ export class PortfolioComponent implements OnInit {
       .data(dataArray)
       .enter().append("rect")
         .attr("style", "fill:#007bff")
-        .attr("height", function (d, i) { return d * 200 })
+        .attr("height", function (d, i) { return (d/cat.boughtAt) * 200 })
         .attr("width", "80")
         .attr("x", function (d, i) { return (i * 120) + 25 })
-        .attr("y", function (d, i) { return 300 - (d * 200) });
+      .attr("y", function (d, i) { return 300 - ((d/cat.boughtAt) * 200) });
+    svg.selectAll("text")
+      .data(dataArray)
+      .enter().append("text")
+      .text(function (d) { return d; })
+      .attr("x", function (d, i) { return (i * 120) + 25 })
+      .attr("y", function (d, i) { return 315 - ((d/cat.boughtAt) * 200) });
+  }
+
+  round(num: number): number {
+    return Math.round(num * 100) / 100;
   }
 
   cancelEditing() {
